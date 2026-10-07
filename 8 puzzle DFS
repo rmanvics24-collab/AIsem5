@@ -1,0 +1,53 @@
+def dfs(state, goal, visited, path, limit):
+    if state == goal:
+        return path
+
+    if limit == 0:
+        return None
+
+    visited.add(state)
+
+    for nxt in moves(state):
+        if nxt not in visited:
+            result = dfs(nxt, goal, visited, path + [nxt], limit - 1)
+            if result:
+                return result
+
+    return None
+
+
+def moves(s):
+    p = s.index(0)
+    r, c = divmod(p, 3)
+
+    for dr, dc in [(-1,0),(1,0),(0,-1),(0,1)]:
+        nr, nc = r + dr, c + dc
+
+        if 0 <= nr < 3 and 0 <= nc < 3:
+            q = nr * 3 + nc
+            a = list(s)
+            a[p], a[q] = a[q], a[p]
+            yield tuple(a)
+
+
+start = tuple(map(int, input("Enter 9 numbers: ").split()))
+goal = (1,2,3,4,5,6,7,8,0)
+
+solution = dfs(start, goal, set(), [start], 30)
+
+print("\nDFS Solution:")
+if solution:
+    for s in solution:
+        print(s[:3])
+        print(s[3:6])
+        print(s[6:])
+        print()
+else:
+    print("No solution found")
+
+
+Enter 9 numbers: 0 1 2 3 4 5 6 7 8
+
+DFS Solution:
+No solution found
+
