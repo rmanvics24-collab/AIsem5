@@ -1,0 +1,56 @@
+
+import random
+import math
+
+N = 8
+
+def cost(board):
+    conflicts = 0
+    for i in range(N):
+        for j in range(i + 1, N):
+            if board[i] == board[j] or abs(board[i] - board[j]) == abs(i - j):
+                conflicts += 1
+    return conflicts
+
+def simulated_annealing():
+    board = [random.randint(0, N - 1) for _ in range(N)]
+    current_cost = cost(board)
+    temperature = 100.0
+    cooling = 0.99
+
+    while current_cost > 0 and temperature > 0.01:
+        col = random.randint(0, N - 1)
+        row = random.randint(0, N - 1)
+
+        neighbor = board[:]
+        neighbor[col] = row
+        new_cost = cost(neighbor)
+        delta = new_cost - current_cost
+
+        if delta < 0 or random.random() < math.exp(-delta / temperature):
+            board = neighbor
+            current_cost = new_cost
+
+        temperature *= cooling
+
+    print("Final board:", board)
+    print("Final cost:", current_cost)
+
+    if current_cost == 0:
+        print("Solution found!")
+        for row in range(N):
+            print(" ".join("Q" if board[col] == row else "."
+                           for col in range(N)))
+    else:
+        print("No solution found. Try running again.")
+
+simulated_annealing()
+
+
+
+
+
+
+Final board: [2, 4, 7, 0, 3, 6, 1, 5]
+Final cost: 1
+No solution found. Try running again.
