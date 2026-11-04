@@ -1,0 +1,74 @@
+symbols = ['P', 'Q', 'R']
+
+def pl_true_kb(model):
+    P = model['P']
+    Q = model['Q']
+    R = model['R']
+
+    sentence1 = (not Q) or P
+    sentence2 = (not P) or (not Q)
+    sentence3 = Q or R
+
+    return sentence1 and sentence2 and sentence3
+
+def pl_true_query(model, query):
+    P = model['P']
+    Q = model['Q']
+    R = model['R']
+
+    if query == 'R':
+        return R
+
+    elif query == 'R -> P':
+        return (not R) or P
+
+    elif query == 'Q -> R':
+        return (not Q) or R
+
+def tt_check_all(symbols, model, query):
+
+    if len(model) == len(symbols):
+
+        if pl_true_kb(model):
+            return pl_true_query(model, query)
+
+        return True
+
+    P = next(s for s in symbols if s not in model)
+    model_true = model.copy()
+    model_true[P] = True
+
+    model_false = model.copy()
+    model_false[P] = False
+
+    return (tt_check_all(symbols, model_true, query)
+            and
+            tt_check_all(symbols, model_false, query))
+
+
+queries = ['R', 'R -> P', 'Q -> R']
+
+for query in queries:
+    result = tt_check_all(symbols, {}, query)
+
+    print("Query:", query)
+
+    if result:
+        print("KB entails", query)
+    else:
+        print("KB does not entail", query)
+
+    print()
+
+
+
+
+
+Query: R
+KB entails R
+
+Query: R -> P
+KB does not entail R -> P
+
+Query: Q -> R
+KB entails Q -> R
