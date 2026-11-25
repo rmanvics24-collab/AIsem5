@@ -1,0 +1,69 @@
+def unify(x, y, subst=None):
+    if subst is None:
+        subst = {}
+
+    if x == y:
+        return subst
+
+    if isinstance(x, str) and x.islower():
+        if x in subst:
+            return unify(subst[x], y, subst)
+
+        if occurs_check(x, y, subst):
+            return None
+
+        subst[x] = y
+        return subst
+
+    if isinstance(y, str) and y.islower():
+        return unify(y, x, subst)
+
+    if isinstance(x, tuple) and isinstance(y, tuple):
+        if x[0] != y[0] or len(x) != len(y):
+            return None
+
+        for a, b in zip(x[1:], y[1:]):
+            subst = unify(a, b, subst)
+
+            if subst is None:
+                return None
+
+        return subst
+
+    return None
+
+
+def occurs_check(var, expr, subst):
+    if var == expr:
+        return True
+
+    if isinstance(expr, str) and expr in subst:
+        return occurs_check(var, subst[expr], subst)
+
+    if isinstance(expr, tuple):
+        return any(
+            occurs_check(var, item, subst)
+            for item in expr[1:]
+        )
+
+    return False
+
+
+# Example expressions
+expr1 = ('Eats', 'x', 'Apple')
+expr2 = ('Eats', 'Riya', 'y')
+
+result = unify(expr1, expr2)
+
+if result is not None:
+    print("Unification Successful")
+    print("Most General Unifier:", result)
+else:
+    print("Unification Failed")
+
+
+
+Unification Successful
+Most General Unifier: {'x': 'Riya', 'y': 'Apple'}
+
+
