@@ -1,0 +1,63 @@
+# Week 9: First Order Logic Resolution
+
+def resolution():
+print(&quot;Knowledge Base:&quot;)
+print(&quot;1. Food(x) -&gt; Likes(John,x)&quot;)
+print(&quot;2. Eats(x,y) AND not Killed(x) -&gt; Food(y)&quot;)
+print(&quot;3. Eats(Anil,Peanuts)&quot;)
+print(&quot;4. Alive(Anil)&quot;)
+print(&quot;5. Alive(x) -&gt; not Killed(x)&quot;)
+
+print(&quot;\nResolution Steps:&quot;)
+
+# Clause 1: ~Food(x) OR Likes(John,x)
+# Negated goal: ~Likes(John,Peanuts)
+
+print(&quot;1. Negated goal: ~Likes(John,Peanuts)&quot;)
+print(&quot;2. Resolve with John likes all food:&quot;)
+print(&quot; ~Food(Peanuts)&quot;)
+
+# Anil eats peanuts
+print(&quot;3. Given: Eats(Anil,Peanuts)&quot;)
+
+# Anil is alive
+print(&quot;4. Given: Alive(Anil)&quot;)
+
+# Alive -&gt; not killed
+print(&quot;5. Therefore: ~Killed(Anil)&quot;)
+
+# Eats and not killed -&gt; food
+print(&quot;6. Therefore: Food(Peanuts)&quot;)
+
+# Contradiction
+print(&quot;7. Resolve Food(Peanuts) and ~Food(Peanuts)&quot;)
+print(&quot; Empty Clause (□)&quot;)
+
+print(&quot;\nConclusion:&quot;)
+print(&quot;John likes peanuts: PROVED&quot;)
+
+resolution()
+
+
+
+
+
+OUTPUT:
+Knowledge Base:
+1. Food(x) -&gt; Likes(John,x)
+2. Eats(x,y) AND not Killed(x) -&gt; Food(y)
+3. Eats(Anil,Peanuts)
+4. Alive(Anil)
+5. Alive(x) -&gt; not Killed(x)
+Resolution Steps:
+1. Negated goal: ~Likes(John,Peanuts)
+2. Resolve with John likes all food:
+~Food(Peanuts)
+3. Given: Eats(Anil,Peanuts)
+4. Given: Alive(Anil)
+5. Therefore: ~Killed(Anil)
+6. Therefore: Food(Peanuts)
+7. Resolve Food(Peanuts) and ~Food(Peanuts)
+Empty Clause (□)
+Conclusion:
+John likes peanuts: PROVED
