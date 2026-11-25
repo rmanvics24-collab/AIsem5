@@ -1,0 +1,86 @@
+KB = [
+    ("American", "Robert"),
+    ("Enemy", "A", "America"),
+    ("Owns", "A", "T1"),
+    ("Missile", "T1")
+]
+
+
+def forward_chaining(KB):
+    new_facts = True
+
+    while new_facts:
+        new_facts = False
+
+        for fact in KB[:]:
+            if fact[0] == "Enemy" and fact[2] == "America":
+                new_fact = ("Hostile", fact[1])
+
+                if new_fact not in KB:
+                    KB.append(new_fact)
+                    new_facts = True
+
+        for fact in KB[:]:
+            if fact[0] == "Missile":
+                new_fact = ("Weapon", fact[1])
+
+                if new_fact not in KB:
+                    KB.append(new_fact)
+                    new_facts = True
+
+        for m in KB[:]:
+            for o in KB[:]:
+                if (m[0] == "Missile" and
+                    o[0] == "Owns" and
+                    m[1] == o[2] and
+                    o[1] == "A"):
+
+                    new_fact = ("Sells", "Robert", m[1], "A")
+
+                    if new_fact not in KB:
+                        KB.append(new_fact)
+                        new_facts = True
+
+        if (("American", "Robert") in KB and
+            ("Weapon", "T1") in KB and
+            ("Sells", "Robert", "T1", "A") in KB and
+            ("Hostile", "A") in KB):
+
+            new_fact = ("Criminal", "Robert")
+
+            if new_fact not in KB:
+                KB.append(new_fact)
+                new_facts = True
+
+    return KB
+
+
+result = forward_chaining(KB)
+
+print("Knowledge Base after Forward Chaining:")
+
+for fact in result:
+    print(fact)
+
+goal = ("Criminal", "Robert")
+
+if goal in result:
+    print("\nGoal Proved: Robert is a Criminal")
+else:
+    print("\nGoal Not Proved")
+
+
+
+
+
+Knowledge Base after Forward Chaining:
+('American', 'Robert')
+('Enemy', 'A', 'America')
+('Owns', 'A', 'T1')
+('Missile', 'T1')
+('Hostile', 'A')
+('Weapon', 'T1')
+('Sells', 'Robert', 'T1', 'A')
+('Criminal', 'Robert')
+
+Goal Proved: Robert is a Criminal
