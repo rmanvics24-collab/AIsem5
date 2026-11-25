@@ -1,0 +1,43 @@
+def alphabeta(node, depth, alpha, beta, maximizing):
+if isinstance(node, int):
+return node
+
+if maximizing:
+value = float(&#39;-inf&#39;)
+
+for i, child in enumerate(node):
+value = max(value, alphabeta(child, depth+1, alpha, beta, False))
+alpha = max(alpha, value)
+
+if alpha &gt;= beta:
+print(&quot;Pruned:&quot;, node[i+1:])
+break
+
+return value
+
+else:
+value = float(&#39;inf&#39;)
+
+for i, child in enumerate(node):
+value = min(value, alphabeta(child, depth+1, alpha, beta, True))
+beta = min(beta, value)
+
+if beta &lt;= alpha:
+print(&quot;Pruned:&quot;, node[i+1:])
+break
+
+return value
+
+# Given game tree
+tree = [
+[[10, 9], [14, 18]],
+[[5, 4], [50, 3]]
+]
+
+result = alphabeta(tree, 0, float(&#39;-inf&#39;), float(&#39;inf&#39;), True)
+
+print(&quot;Final value of MAX node:&quot;, result)
+OUTPUT:
+Pruned: [18]
+Pruned: [[50, 3]]
+Final value of MAX node: 10
